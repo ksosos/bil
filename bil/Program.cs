@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,6 +36,22 @@ namespace opp
             private bool startet = false;
             private int speed = 0;
             private bool speedup = false;
+            public bool randomAuto(bool auto)
+            {
+                Random rand = new Random();
+                int a = rand.Next(0, 3);
+                int b = rand.Next(0, 3);
+                if (a == b)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+                
+            }
+
             public void start()
             {
                 Random e = new Random();
@@ -96,78 +112,168 @@ namespace opp
                 {
                     Console.WriteLine(navn + " har startet å kjøre. Bruk piltastene på numpaden til å kjøre");
                 }
-                while (startet)
+                bool auto = false;
+                if(!randomAuto(auto))
                 {
-                    
-                    ConsoleKeyInfo key = Console.ReadKey(true);
-                    if (key.KeyChar.ToString().ToLower() == "8")
+
+                    while (startet)
                     {
-                        if (speed >= 60 && gear < 2)
+
+                        ConsoleKeyInfo key = Console.ReadKey(true);
+                        if (key.KeyChar.ToString().ToLower() == "8")
                         {
-                            speed = 60;
-                            Console.WriteLine("Du går så fort som mulig, du må gire!");
+                            if (speed >= 60 && gear < 2)
+                            {
+                                speed = 60;
+                                Console.WriteLine("Du går så fort som mulig, du må gire!");
+                            }
+
+                            else if (speed >= 90 && gear == 2 && !(gear > 2))
+                            {
+                                speed = 90;
+                                Console.WriteLine("Du går så fort som mulig, du må gire!");
+                            }
+                            else if (speed > topSpeed)
+                            {
+                                Console.WriteLine("Du kan ikke gå raskere enn " + topSpeed);
+                            }
+                            else
+                            {
+                                speed++;
+                                Console.WriteLine(speed);
+                            }
+
+                        }
+                        else if (key.KeyChar.ToString().ToLower() == "2")
+                        {
+                            if (speed <= -10)
+                            {
+                                speed = -10;
+                                Console.WriteLine("Du går baklengs så fort som mulig");
+                            }
+                            else
+                            {
+                                speed--;
+                                Console.WriteLine(speed);
+                            }
+                        }
+                        else if (key.KeyChar.ToString() == "6" && gear < 6)
+                        {
+                            if (speed < 60 && gear >= 1)
+                            {
+                                gear -= 1;
+                                Console.WriteLine("Du kan ikke gire uten å gå til topspeed for gear " + gear);
+                            }
+                            if (speed < 90 && gear >= 2)
+                            {
+                                gear -= 1;
+                                Console.WriteLine("Du kan ikke gire uten å gå til topspeed for gear " + gear);
+                            }
+                            else
+                            {
+                                gear++;
+                                Console.WriteLine("Gear " + gear);
+                            }
+
+                        }
+                        else if (key.KeyChar.ToString() == "4" && gear > 0)
+                        {
+
+
+                            if (speed > 60 && gear <= 2)
+                            {
+                                Console.WriteLine("Du må bremse bilen hvis du vil komme til gear " + (gear - 1));
+                            }
+                            else if (speed > 90 && gear <= 3)
+
+                            {
+                                Console.WriteLine("Du må bremse bilen hvis du vil komme til gear " + (gear - 1));
+
+
+                            }
+                            else
+                            {
+                                gear--;
+                                Console.WriteLine("Gear " + gear);
+                            }
+
+
+
                         }
 
-                        else if (speed >= 90 && gear == 2 && !(gear > 2))
-                        {
-                            speed = 90;
-                            Console.WriteLine("Du går så fort som mulig, du må gire!");
-                        }
-                        else if (speed > topSpeed)
-                        {
-                            Console.WriteLine("Du kan ikke gå raskere enn " + topSpeed);
-                        }
-                        else
-                        {
-                            speed++;
-                            Console.WriteLine(speed);
-                        }
-
                     }
-                    else if (key.KeyChar.ToString().ToLower() == "2")
-                    {
-                        if (speed <= -10)
-                        {
-                            speed = -10;
-                            Console.WriteLine("Du går baklengs så fort som mulig");
-                        }
-                        else
-                        {
-                            speed--;
-                            Console.WriteLine(speed);
-                        }
-                    }
-                    else if (key.KeyChar.ToString() == "6" && gear < 6 )
-                    {
-                        if(speed < 60 && gear >= 1)
-                        {
-                            gear -=1;
-                            Console.WriteLine("Du kan ikke gire uten å gå til topspeed for gear " + gear);
-                        }
-                        if(speed<90 && gear >= 2)
-                        {
-                            gear = 2;
-                            Console.WriteLine("Du kan ikke gire uten å gå til topspeed for gear " + gear);
-                        }
-                        else
-                        {
-                            gear++;
-                            Console.WriteLine("Gear " + gear);
-                        }
-                        
-                    }
-                    else if (key.KeyChar.ToString() == "4" && gear > 0)
-                    {
-                        
-                        
-                        
-                            gear--;
-                            Console.WriteLine("Gear " + gear);
-                        
-                        
-                    }
-
                 }
+                else
+                {
+                    Console.WriteLine("Bilen din er automatisk");
+                    Random rand = new Random();
+                    int speedAuto = 0;
+                    int maxSpeed = rand.Next(200,350);
+                    int maxReverse = rand.Next(-20,-10);
+
+                    while (startet)
+                    {
+                        ConsoleKeyInfo keye = Console.ReadKey(true);
+                       
+                        if(keye.KeyChar.ToString() == "8")
+                        {
+
+                            if (speedAuto == 60)
+                            {
+                                Console.WriteLine("Gear 2");
+                                speedAuto += 1;
+                                Console.WriteLine(speedAuto);
+
+                            }
+                            else if (speedAuto == 90)
+                            {
+                                Console.WriteLine("Gear 3");
+                                speedAuto += 1;
+                                Console.WriteLine(speedAuto);
+                            }
+                            else if(speedAuto >= maxSpeed)
+                            {
+                                speedAuto = maxSpeed;
+                                Console.WriteLine("Du kjorer sa fort som mulig");
+                            }
+                            else
+                            {
+                                speedAuto += 1;
+                                Console.WriteLine(speedAuto);
+                            }
+
+                        }
+                        else if(keye.KeyChar.ToString() == "2")
+                        {
+
+                            if (speedAuto == 60)
+                            {
+                                Console.WriteLine("Gear 2");
+                                speedAuto -= 1;
+                                Console.WriteLine(speedAuto);
+
+                            }
+                            else if (speedAuto == 90)
+                            {
+                                Console.WriteLine("Gear 3");
+                                speedAuto -= 1;
+                                Console.WriteLine(speedAuto);
+                            }
+                            if (speedAuto < maxReverse)
+                            {
+                                speedAuto = -10;
+                                Console.WriteLine("Du rygger så fort som mulig ");
+                            }
+                            else
+                            {
+                                speedAuto-=1;
+                                Console.WriteLine(speedAuto);
+                            }
+                           
+                        }
+                    }
+                }
+
             }
         }
 
